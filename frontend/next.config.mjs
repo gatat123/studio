@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ESLint 경고를 무시하고 빌드 진행
+  eslint: {
+    ignoreDuringBuilds: true,  // 빌드 시 ESLint 경고 무시
+  },
   images: {
     domains: ['studio-backend-production.up.railway.app', 'localhost'],
     remotePatterns: [

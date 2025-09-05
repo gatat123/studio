@@ -57,3 +57,6 @@ export interface NotificationSettings {
     types: NotificationType[];
   };
 }
+
+// Alias for backward compatibility
+export type Notification = AppNotification;
