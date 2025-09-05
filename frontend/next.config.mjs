@@ -17,12 +17,13 @@ const nextConfig = {
     ],
   },
   async rewrites() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'studio-backend-production.up.railway.app';
+    const fullApiUrl = apiUrl.startsWith('http') ? apiUrl : `https://${apiUrl}`;
+    
     return [
       {
         source: '/api/:path*',
-        destination: process.env.NEXT_PUBLIC_API_URL
-          ? `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`
-          : 'http://localhost:3001/api/:path*',
+        destination: `${fullApiUrl}/api/:path*`,
       },
     ]
   },
