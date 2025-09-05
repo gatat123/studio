@@ -1,18 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCw, 
-  Maximize2,
-  Download,
-  Grid3x3
+  Eye,
+  Columns,
+  FileImage,
+  FileText,
+  Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Card } from '@/components/ui/card';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { ImageViewer, ImageComparison, PDFViewer } from '@/components/viewers';
 
 interface SceneViewerProps {
   scene: any;
@@ -20,245 +19,202 @@ interface SceneViewerProps {
 }
 
 export default function SceneViewer({ scene, viewMode }: SceneViewerProps) {
-  const [zoom, setZoom] = useState(100);
-  const [rotation, setRotation] = useState(0);
-  const [showGrid, setShowGrid] = useState(false);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [viewerType, setViewerType] = useState<'image' | 'pdf' | 'compare'>('image');
+  const [selectedImage, setSelectedImage] = useState<string>('');
 
-  const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 10, 200));
+  const handleOpenViewer = (type: 'image' | 'pdf' | 'compare', imageSrc?: string) => {
+    setViewerType(type);
+    if (imageSrc) setSelectedImage(imageSrc);
+    setIsViewerOpen(true);
   };
 
-  const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 10, 50));
+  const handleDownload = (url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  const handleRotate = () => {
-    setRotation(prev => (prev + 90) % 360);
+  const getFileType = (url: string): 'image' | 'pdf' => {
+    const extension = url.split('.').pop()?.toLowerCase();
+    if (extension === 'pdf') return 'pdf';
+    return 'image';
   };
 
-  const handleDownload = (type: 'draft' | 'artwork') => {
-    const url = type === 'draft' ? scene.draft?.url : scene.artwork?.url;
-    if (url) {
-      // 실제 구현에서는 파일 다운로드 처리
-      window.open(url, '_blank');
-    }
-  };
-
-  const handleFullscreen = () => {
-    // 전체화면 모드 구현
-    const element = document.getElementById('scene-viewer');
-    if (element?.requestFullscreen) {
-      element.requestFullscreen();
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      {/* 툴바 */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
+  const renderContent = () => {
+    if (viewMode === 'compare') {
+      // 비교 모드
+      return (
+        <Card className="p-4">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-medium">버전 비교</h3>
               <Button
-                variant="outline"
+                onClick={() => handleOpenViewer('compare')}
                 size="sm"
-                onClick={handleZoomOut}
-                disabled={zoom <= 50}
               >
-                <ZoomOut className="h-4 w-4" />
+                <Columns className="h-4 w-4 mr-2" />
+                비교 뷰어 열기
               </Button>
-              <div className="w-32">
-                <Slider
-                  value={[zoom]}
-                  onValueChange={(value) => setZoom(value[0])}
-                  min={50}
-                  max={200}
-                  step={10}
-                />
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleZoomIn}
-                disabled={zoom >= 200}
-              >
-                <ZoomIn className="h-4 w-4" />
-              </Button>
-              <span className="text-sm text-gray-500 ml-2">{zoom}%</span>
             </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRotate}
-            >
-              <RotateCw className="h-4 w-4 mr-2" />
-              회전
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowGrid(!showGrid)}
-            >
-              <Grid3x3 className="h-4 w-4 mr-2" />
-              그리드
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {viewMode === 'draft' && scene.draft && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleDownload('draft')}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                초안 다운로드
-              </Button>
-            )}
-            {viewMode === 'artwork' && scene.artwork && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleDownload('artwork')}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                아트워크 다운로드
-              </Button>
-            )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleFullscreen}
-            >
-              <Maximize2 className="h-4 w-4 mr-2" />
-              전체화면
-            </Button>
-          </div>
-        </div>
-      </Card>
-
-      {/* 뷰어 영역 */}
-      <div id="scene-viewer" className="bg-gray-100 rounded-lg overflow-auto" style={{ height: '600px' }}>
-        <div className="relative min-h-full flex items-center justify-center p-8">
-          {viewMode === 'compare' ? (
-            <div className="flex gap-4">
-              {/* 초안 */}
-              <div className="relative">
-                <div className="absolute top-2 left-2 z-10 bg-black/50 text-white px-2 py-1 rounded text-sm">
-                  초안
-                </div>
-                {scene.draft ? (
-                  <div
-                    style={{
-                      transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                      transition: 'transform 0.3s ease'
-                    }}
-                  >
+            
+            {scene.draft?.url && scene.artwork?.url ? (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="text-sm font-medium text-muted-foreground">초안</div>
+                  <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
                     <img
                       src={scene.draft.url}
                       alt="초안"
-                      className="max-w-full h-auto"
-                      style={{ maxHeight: '500px' }}
+                      className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition"
+                      onClick={() => handleOpenViewer('image', scene.draft.url)}
                     />
-                    {showGrid && (
-                      <div className="absolute inset-0 pointer-events-none" style={{
-                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px), repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px)',
-                        backgroundSize: '50px 50px'
-                      }} />
-                    )}
                   </div>
-                ) : (
-                  <div className="w-96 h-96 bg-gray-200 flex items-center justify-center rounded">
-                    <p className="text-gray-500">초안 없음</p>
-                  </div>
-                )}
-              </div>
-
-              {/* 아트워크 */}
-              <div className="relative">
-                <div className="absolute top-2 left-2 z-10 bg-black/50 text-white px-2 py-1 rounded text-sm">
-                  아트워크
                 </div>
-                {scene.artwork ? (
-                  <div
-                    style={{
-                      transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                      transition: 'transform 0.3s ease'
-                    }}
-                  >
+                
+                <div className="space-y-2">
+                  <div className="text-sm font-medium text-muted-foreground">아트워크</div>
+                  <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
                     <img
                       src={scene.artwork.url}
                       alt="아트워크"
-                      className="max-w-full h-auto"
-                      style={{ maxHeight: '500px' }}
+                      className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition"
+                      onClick={() => handleOpenViewer('image', scene.artwork.url)}
                     />
-                    {showGrid && (
-                      <div className="absolute inset-0 pointer-events-none" style={{
-                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px), repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px)',
-                        backgroundSize: '50px 50px'
-                      }} />
-                    )}
                   </div>
-                ) : (
-                  <div className="w-96 h-96 bg-gray-200 flex items-center justify-center rounded">
-                    <p className="text-gray-500">아트워크 없음</p>
-                  </div>
-                )}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="relative">
-              {viewMode === 'draft' && scene.draft ? (
-                <div
-                  style={{
-                    transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                    transition: 'transform 0.3s ease'
-                  }}
-                >
-                  <img
-                    src={scene.draft.url}
-                    alt="초안"
-                    className="max-w-full h-auto"
-                    style={{ maxHeight: '500px' }}
-                  />
-                  {showGrid && (
-                    <div className="absolute inset-0 pointer-events-none" style={{
-                      backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px), repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px)',
-                      backgroundSize: '50px 50px'
-                    }} />
-                  )}
-                </div>
-              ) : viewMode === 'artwork' && scene.artwork ? (
-                <div
-                  style={{
-                    transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                    transition: 'transform 0.3s ease'
-                  }}
-                >
-                  <img
-                    src={scene.artwork.url}
-                    alt="아트워크"
-                    className="max-w-full h-auto"
-                    style={{ maxHeight: '500px' }}
-                  />
-                  {showGrid && (
-                    <div className="absolute inset-0 pointer-events-none" style={{
-                      backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px), repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,0,0,0.1) 49px, rgba(0,0,0,0.1) 50px)',
-                      backgroundSize: '50px 50px'
-                    }} />
-                  )}
-                </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                비교할 이미지가 없습니다
+              </div>
+            )}
+          </div>
+        </Card>
+      );
+    }
+
+    // 단일 뷰 모드
+    const imageUrl = viewMode === 'draft' ? scene.draft?.url : scene.artwork?.url;
+    const fileType = imageUrl ? getFileType(imageUrl) : null;
+
+    if (!imageUrl) {
+      return (
+        <Card className="p-8">
+          <div className="text-center text-muted-foreground">
+            <FileImage className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>{viewMode === 'draft' ? '초안이' : '아트워크가'} 없습니다</p>
+          </div>
+        </Card>
+      );
+    }
+
+    return (
+      <Card className="p-4">
+        <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              {fileType === 'pdf' ? (
+                <FileText className="h-5 w-5 text-muted-foreground" />
               ) : (
-                <div className="w-96 h-96 bg-gray-200 flex items-center justify-center rounded">
-                  <p className="text-gray-500">이미지 없음</p>
-                </div>
+                <FileImage className="h-5 w-5 text-muted-foreground" />
               )}
+              <span className="text-sm font-medium">
+                {viewMode === 'draft' ? '초안' : '아트워크'}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => handleOpenViewer(fileType, imageUrl)}
+                size="sm"
+                variant="outline"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                뷰어 열기
+              </Button>
+              
+              <Button
+                onClick={() => handleDownload(imageUrl, `scene-${scene.id}-${viewMode}`)}
+                size="sm"
+                variant="outline"
+              >
+                <Download className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+            {fileType === 'pdf' ? (
+              <div className="flex items-center justify-center h-full cursor-pointer hover:bg-muted/80 transition"
+                   onClick={() => handleOpenViewer('pdf', imageUrl)}>
+                <FileText className="h-16 w-16 text-muted-foreground" />
+                <span className="ml-2 text-muted-foreground">PDF 문서</span>
+              </div>
+            ) : (
+              <img
+                src={imageUrl}
+                alt={viewMode === 'draft' ? '초안' : '아트워크'}
+                className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition"
+                onClick={() => handleOpenViewer('image', imageUrl)}
+              />
+            )}
+          </div>
+
+          {/* 버전 정보 */}
+          {(viewMode === 'draft' ? scene.draft : scene.artwork) && (
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>
+                업로드: {new Date((viewMode === 'draft' ? scene.draft : scene.artwork).uploadedAt).toLocaleDateString('ko-KR')}
+              </span>
+              <span>
+                버전: {(viewMode === 'draft' ? scene.draft : scene.artwork).version || 1}
+              </span>
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </Card>
+    );
+  };
+
+  return (
+    <>
+      {renderContent()}
+
+      {/* 뷰어 다이얼로그 */}
+      <Dialog open={isViewerOpen} onOpenChange={setIsViewerOpen}>
+        <DialogContent className="max-w-[90vw] max-h-[90vh] w-full h-full p-0">
+          {viewerType === 'compare' && scene.draft?.url && scene.artwork?.url && (
+            <ImageComparison
+              beforeSrc={scene.draft.url}
+              afterSrc={scene.artwork.url}
+              beforeLabel="초안"
+              afterLabel="아트워크"
+              className="w-full h-full"
+            />
+          )}
+          
+          {viewerType === 'image' && selectedImage && (
+            <ImageViewer
+              src={selectedImage}
+              alt={`Scene ${scene.id}`}
+              className="w-full h-full"
+              onClose={() => setIsViewerOpen(false)}
+            />
+          )}
+          
+          {viewerType === 'pdf' && selectedImage && (
+            <PDFViewer
+              src={selectedImage}
+              className="w-full h-full"
+              onClose={() => setIsViewerOpen(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

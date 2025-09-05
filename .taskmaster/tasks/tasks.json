@@ -936,7 +936,7 @@
           8,
           9
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1012,16 +1012,125 @@
         "id": 12,
         "title": "협업 기능 - 댓글 시스템 구현",
         "description": "위치 기반 댓글 및 스레드 시스템 구현",
-        "details": "1. Comment 모듈 생성\n2. Comment 컨트롤러 및 서비스 구현\n3. 댓글 CRUD 엔드포인트 구현\n4. 위치 기반 댓글 저장 구현 (x, y 좌표)\n5. 댓글 스레드 구현 (parent_id 사용)\n6. 멘션 기능 구현 (@사용자)\n7. 파일 첨부 기능 구현\n8. 댓글 알림 시스템 연동\n9. 댓글 조회 및 필터링 API 구현\n10. 댓글 권한 관리 구현",
-        "testStrategy": "단위 테스트: 댓글 생성, 수정, 삭제\n통합 테스트: 스레드 및 멘션 기능\n위치 기반 댓글 테스트\n파일 첨부 테스트",
-        "priority": "medium",
+        "status": "done",
         "dependencies": [
           2,
           9,
           11
         ],
-        "status": "pending",
-        "subtasks": []
+        "priority": "medium",
+        "details": "백엔드 구현:\n- CommentsService: WebSocket 통합, 멘션 처리, 파일 첨부, 필터링 API 완성\n- CommentsController: 필터링 엔드포인트, 파일 업로드 지원 추가\n- EventsGateway: 댓글 실시간 이벤트 통합\n- CommentsModule: 필요한 모든 의존성 연결\n\n프론트엔드 구현:\n- CommentThread: 댓글 스레드 UI 컴포넌트\n- CommentEditor: 멘션, 파일 첨부 지원하는 에디터\n- AnnotationLayer: 위치 기반 댓글을 위한 어노테이션 레이어\n- SceneViewer: 댓글 시스템 통합된 씬 뷰어\n- useComments: WebSocket 실시간 업데이트 지원하는 API 훅\n\n주요 기능:\n1. 위치 기반 댓글 (이미지 클릭으로 댓글 추가)\n2. 스레드형 답글 시스템\n3. 멘션 기능 (@사용자)\n4. 파일 첨부 (이미지, PDF, 문서)\n5. 댓글 해결/미해결 상태 관리\n6. 댓글 고정 기능\n7. 실시간 WebSocket 알림\n8. 댓글 필터링 (해결됨, 고정됨, 사용자별)",
+        "testStrategy": "단위 테스트:\n- 댓글 생성, 수정, 삭제 기능\n- 멘션 처리 및 파일 첨부 기능\n- 댓글 상태 관리 (해결/미해결, 고정)\n\n통합 테스트:\n- 스레드 및 멘션 기능\n- 위치 기반 댓글 기능\n- WebSocket 실시간 업데이트\n- 파일 첨부 및 업로드\n- 필터링 API\n\nUI 테스트:\n- CommentThread 컴포넌트\n- CommentEditor 기능\n- AnnotationLayer 상호작용",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "백엔드 - CommentsModule 및 기본 구조 구현",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "백엔드 - CommentsService 구현 (WebSocket 통합, 멘션, 파일 첨부)",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "백엔드 - CommentsController 구현 (필터링, 파일 업로드)",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "백엔드 - EventsGateway 댓글 이벤트 통합",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "프론트엔드 - CommentThread UI 컴포넌트 구현",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "프론트엔드 - CommentEditor 구현 (멘션, 파일 첨부)",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "프론트엔드 - AnnotationLayer 구현 (위치 기반 댓글)",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "프론트엔드 - SceneViewer 댓글 시스템 통합",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 9,
+            "title": "프론트엔드 - useComments API 훅 구현 (WebSocket 지원)",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 10,
+            "title": "댓글 해결/미해결 상태 관리 기능 구현",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 11,
+            "title": "댓글 고정 기능 구현",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 12,
+            "title": "댓글 필터링 기능 구현 (해결됨, 고정됨, 사용자별)",
+            "description": "",
+            "status": "done",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
       },
       {
         "id": 13,
@@ -1034,7 +1143,7 @@
           10,
           12
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -1074,7 +1183,7 @@
           3,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -1088,7 +1197,7 @@
           15,
           16
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -1102,21 +1211,21 @@
           9,
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
         "id": 19,
-        "title": "이미지 뷰어 및 PDF 뷰어 구현", 
+        "title": "이미지 뷰어 및 PDF 뷰어 구현",
         "description": "이미지 및 PDF 뷰어 컴포넌트 구현",
-        "details": "1. 이미지 뷰어 컴포넌트 구현\n2. 확대/축소 기능 구현\n3. 이미지 회전 기능 구현\n4. 이미지 비교 기능 구현 (버전 간)\n5. PDF 뷰어 컴포넌트 구현 (pdf.js 사용)\n6. PDF 페이지 네비게이션 구현\n7. PDF 썸네일 네비게이션 구현\n8. 전체 화면 모드 구현\n9. 이미지/PDF 다운로드 기능 구현\n10. 모바일 터치 제스처 지원",
+        "details": "1. 이미지 뷰어 컴포넌트 구현\n2. 확대/축소 기능 구현\n3. 이미지 회전 기능 구현\n4. 이미지 비교 기능 구현 (버전 간)\n5. PDF 뷰어 컴포넌트 구현 (pdf.js 사용)\n6. PDF 페이지 네비게이션 구현\n7. PDF 썸네일 네비게이션 구현\n8. 전체 화면 모드 구현\n9. 이미지/PDF 다운로드 기능 구현\n10. 모바일 터치 제스처 지원\n<info added on 2025-09-05T15:38:13.395Z>\n## 구현 완료 사항\n\n### 컴포넌트 구현\n- ImageViewer 컴포넌트 - 확대/축소, 회전, 다운로드, 전체화면, 모바일 터치 지원 완료\n- ImageComparison 컴포넌트 - 슬라이더/나란히/오버레이 3가지 모드로 버전 비교 기능 구현\n- PDFViewer 컴포넌트 - 페이지 네비게이션, 썸네일 뷰, 확대/축소, 다운로드 기능 구현\n- SceneViewer와 통합 완료\n\n### 사용 라이브러리\n- react-zoom-pan-pinch: 이미지 줌/팬 기능 구현\n- react-pdf: PDF 뷰어 기능 구현 (pdf.js 대체)\n\n### 상태\n- 모든 기능 정상 작동 확인\n- 모바일 터치 제스처 지원 완료\n</info added on 2025-09-05T15:38:13.395Z>",
         "testStrategy": "컴포넌트 테스트: 뷰어 렌더링\n통합 테스트: 확대/축소 및 네비게이션\nPDF 로딩 및 페이지 이동 테스트\n모바일 제스처 테스트",
         "priority": "medium",
         "dependencies": [
           10,
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -1181,7 +1290,7 @@
           11,
           19
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -1199,7 +1308,7 @@
           11,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -1216,13 +1325,13 @@
           18,
           24
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-09-05T04:08:19.961Z",
-      "updated": "2025-09-05T11:28:35.163Z",
+      "updated": "2025-09-05T15:54:07.930Z",
       "description": "Tasks for master context"
     }
   }
