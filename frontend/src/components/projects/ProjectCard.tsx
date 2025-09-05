@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Calendar, User, FolderOpen, Palette, Storyboard, FileImage } from 'lucide-react';
+import { Calendar, User, FolderOpen, Palette, Layers, FileImage } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
@@ -33,7 +33,7 @@ interface ProjectCardProps {
 const categoryIcons = {
   webtoon: FolderOpen,
   illustration: Palette,
-  storyboard: Storyboard,
+  storyboard: Layers,
   concept: FileImage,
 };
 

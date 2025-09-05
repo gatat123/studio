@@ -28,7 +28,7 @@ import {
   FileText,
   RotateCcw,
   Eye,
-  Compare,
+  GitCompare,
   MessageSquare,
   MoreVertical,
   Download,
@@ -147,7 +147,7 @@ export function SceneVersionHistory({
                   sortedVersions[1].id
                 )}
               >
-                <Compare className="h-4 w-4 mr-2" />
+                <GitCompare className="h-4 w-4 mr-2" />
                 최근 2개 버전 비교
               </Button>
             )}
@@ -291,7 +291,7 @@ export function SceneVersionHistory({
                                   version.id,
                                   sortedVersions[index - 1].id
                                 )}>
-                                  <Compare className="h-4 w-4 mr-2" />
+                                  <GitCompare className="h-4 w-4 mr-2" />
                                   이전 버전과 비교
                                 </DropdownMenuItem>
                               )}
@@ -380,3 +380,5 @@ export function SceneVersionHistory({
     </div>
   );
 }
+
+export default SceneVersionHistory;

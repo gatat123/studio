@@ -115,7 +115,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -123,7 +123,7 @@
             "description": "사용자(User) 테이블과 관련 인증 필드 설계 및 TypeORM 엔티티 정의",
             "dependencies": [],
             "details": "User 엔티티 생성: id(UUID), email(unique), password(해시), nickname, avatar(URL), created_at, updated_at 필드 포함. 인덱스는 email과 nickname에 생성. TypeORM @Entity, @Column 데코레이터 사용하여 정의. 비밀번호 필드에는 @BeforeInsert, @BeforeUpdate 훅을 사용하여 bcrypt 해싱 로직 구현.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "엔티티 유효성 검사, 필드 타입 검증, 인덱스 생성 확인, 비밀번호 해싱 기능 테스트"
           },
           {
@@ -134,7 +134,7 @@
               "2.1"
             ],
             "details": "Studio 엔티티: id(UUID), name, description, created_by(User 외래키), created_at, updated_at 필드 포함. StudioMember 엔티티: id(UUID), studio_id(Studio 외래키), user_id(User 외래키), role(enum: admin, editor, viewer), created_at 필드 포함. @ManyToOne, @OneToMany 데코레이터로 User-Studio, Studio-StudioMember 관계 설정. role 필드는 TypeORM enum 타입으로 정의.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "관계 설정 검증, 외래키 제약조건 테스트, enum 값 유효성 검사"
           },
           {
@@ -145,7 +145,7 @@
               "2.2"
             ],
             "details": "Project 엔티티: id(UUID), studio_id(Studio 외래키), name, description, status(enum: planning, in_progress, review, completed), category(enum: webtoon, illustration, storyboard, concept), created_at, updated_at, deleted_at(소프트 삭제용) 필드 포함. @ManyToOne 데코레이터로 Studio-Project 관계 설정. TypeORM @DeleteDateColumn으로 소프트 삭제 구현. status와 category는 enum 타입으로 정의하고 인덱스 추가.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "소프트 삭제 기능 테스트, enum 필드 제약조건 검증, 관계 설정 테스트"
           },
           {
@@ -156,7 +156,7 @@
               "2.3"
             ],
             "details": "Scene 엔티티: id(UUID), project_id(Project 외래키), title, order(정렬용 숫자), created_by(User 외래키), created_at, updated_at 필드 포함. @ManyToOne 데코레이터로 Project-Scene, User-Scene 관계 설정. order 필드에 인덱스 추가하여 정렬 성능 최적화. 씬 순서 변경 시 사용할 메서드 추가(updateOrder).",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "씬 순서 정렬 테스트, 프로젝트-씬 관계 검증, 씬 생성 및 조회 테스트"
           },
           {
@@ -167,7 +167,7 @@
               "2.4"
             ],
             "details": "File 엔티티: id(UUID), scene_id(Scene 외래키), version(버전 번호), file_path(저장 경로), thumbnail_path(썸네일 경로), file_type(파일 유형), created_by(User 외래키), created_at 필드 포함. @ManyToOne 데코레이터로 Scene-File, User-File 관계 설정. version과 scene_id에 복합 인덱스 추가하여 특정 씬의 파일 버전 조회 최적화.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "파일 버전 관리 테스트, 경로 저장 및 조회 테스트, 씬-파일 관계 검증"
           },
           {
@@ -179,7 +179,7 @@
               "2.1"
             ],
             "details": "Comment 엔티티: id(UUID), file_id(File 외래키), user_id(User 외래키), parent_id(자기참조 외래키, 대댓글용), content, position_x, position_y(이미지 위치 좌표), created_at, updated_at 필드 포함. @ManyToOne 데코레이터로 File-Comment, User-Comment 관계 설정. 대댓글 구현을 위한 self-referencing 관계 설정(@ManyToOne, @OneToMany). file_id와 user_id에 인덱스 추가.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "대댓글 구조 테스트, 좌표 저장 및 조회 테스트, 댓글 트리 구조 조회 테스트"
           },
           {
@@ -190,7 +190,7 @@
               "2.1"
             ],
             "details": "Notification 엔티티: id(UUID), user_id(User 외래키), type(enum: comment, mention, invite, update 등), content, is_read(boolean), related_id(관련 엔티티 ID), created_at 필드 포함. @ManyToOne 데코레이터로 User-Notification 관계 설정. user_id와 is_read에 복합 인덱스 추가하여 읽지 않은 알림 조회 최적화. type은 enum 타입으로 정의.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "알림 타입별 생성 테스트, 읽음 상태 변경 테스트, 사용자별 알림 조회 테스트"
           },
           {
@@ -207,7 +207,7 @@
               "2.7"
             ],
             "details": "모든 엔티티 간 관계 설정 완료: User-Studio(OneToMany), Studio-StudioMember(OneToMany), Studio-Project(OneToMany), Project-Scene(OneToMany), Scene-File(OneToMany), File-Comment(OneToMany), User-Notification(OneToMany), Comment-Comment(자기참조). 양방향 관계가 필요한 경우 @JoinColumn과 함께 관계 데코레이터 설정. 캐스케이드 옵션 적절히 설정(예: 프로젝트 삭제 시 씬도 삭제).",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "모든 관계 조인 쿼리 테스트, 캐스케이드 동작 테스트, 양방향 관계 데이터 로드 테스트"
           },
           {
@@ -218,7 +218,7 @@
               "2.8"
             ],
             "details": "TypeORM CLI 설정(ormconfig.js 또는 data-source.ts). 마이그레이션 생성 명령어 설정(npm script). 초기 마이그레이션 스크립트 생성(typeorm migration:generate). 각 테이블 생성 SQL이 포함된 마이그레이션 파일 검토 및 수정. 롤백 시나리오 고려하여 down 메서드 구현. 인덱스 및 외래키 제약조건 확인.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "마이그레이션 실행 테스트(up), 롤백 테스트(down), 데이터베이스 스키마 검증"
           },
           {
@@ -229,7 +229,7 @@
               "2.9"
             ],
             "details": "개발 환경용 시드 데이터 스크립트 작성. 테스트 사용자, 스튜디오, 프로젝트, 씬 등 기본 데이터 생성. Factory 패턴 사용하여 테스트 데이터 생성 함수 구현. 시드 데이터 실행 명령어 npm script로 추가. 환경별(개발/테스트) 시드 데이터 분리. 관계가 있는 데이터는 순서대로 생성되도록 구현.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "시드 데이터 삽입 테스트, 관계 데이터 정확성 검증, 중복 실행 시 오류 방지 테스트"
           }
         ]
@@ -244,7 +244,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -252,7 +252,7 @@
             "description": "NestJS Auth 모듈을 생성하고 사용자 엔티티 및 관련 서비스를 구현합니다.",
             "dependencies": [],
             "details": "1. Auth 모듈 생성 (nest g module auth)\n2. User 엔티티 구현 (id, email, password, nickname, isEmailVerified, refreshToken, createdAt, updatedAt 필드 포함)\n3. TypeORM 설정에 User 엔티티 등록\n4. UserService 구현 (사용자 생성, 조회, 업데이트 메소드 포함)\n5. UserRepository 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "User 엔티티 CRUD 작업에 대한 단위 테스트 작성, 데이터베이스 연결 및 쿼리 테스트"
           },
           {
@@ -263,7 +263,7 @@
               "3.1"
             ],
             "details": "1. bcrypt 패키지 설치 및 설정\n2. 비밀번호 해싱 유틸리티 함수 구현 (해싱, 비교)\n3. JWT 모듈 설치 및 설정 (access token, refresh token)\n4. JWT 전략 구현 (JwtStrategy 클래스)\n5. JWT 가드 구현 (JwtAuthGuard)\n6. RefreshToken 전략 및 가드 구현\n7. 토큰 발급 및 검증 서비스 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "비밀번호 해싱/비교 테스트, JWT 토큰 생성/검증 테스트, 토큰 만료 테스트"
           },
           {
@@ -274,7 +274,7 @@
               "3.2"
             ],
             "details": "1. AuthController 생성\n2. 로그인 DTO 구현 (LoginDto)\n3. 회원가입 DTO 구현 (RegisterDto)\n4. 로그인 엔드포인트 구현 (/auth/login)\n5. 회원가입 엔드포인트 구현 (/auth/register)\n6. 입력 유효성 검사 (class-validator 사용)\n7. 로그인 성공 시 access token과 refresh token 반환\n8. Remember Me 기능 구현 (7일 유효 토큰)",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "로그인/회원가입 엔드포인트 통합 테스트, 유효하지 않은 입력에 대한 오류 처리 테스트, 토큰 발급 테스트"
           },
           {
@@ -285,7 +285,7 @@
               "3.3"
             ],
             "details": "1. nodemailer 패키지 설치 및 설정\n2. 이메일 서비스 구현 (EmailService)\n3. 이메일 템플릿 구현 (확인 이메일)\n4. 이메일 인증 토큰 생성 및 저장 로직 구현\n5. 이메일 인증 엔드포인트 구현 (/auth/verify-email)\n6. 회원가입 시 인증 이메일 발송 로직 추가\n7. 이메일 인증 상태 확인 로직 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "이메일 발송 테스트, 인증 토큰 검증 테스트, 이메일 템플릿 렌더링 테스트"
           },
           {
@@ -296,7 +296,7 @@
               "3.4"
             ],
             "details": "1. 비밀번호 재설정 요청 DTO 구현 (ForgotPasswordDto)\n2. 비밀번호 재설정 DTO 구현 (ResetPasswordDto)\n3. 비밀번호 재설정 요청 엔드포인트 구현 (/auth/forgot-password)\n4. 비밀번호 재설정 엔드포인트 구현 (/auth/reset-password)\n5. 비밀번호 재설정 토큰 생성 및 저장 로직 구현\n6. 비밀번호 재설정 이메일 템플릿 구현\n7. 비밀번호 재설정 이메일 발송 로직 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "비밀번호 재설정 플로우 통합 테스트, 토큰 유효성 검사 테스트, 이메일 발송 테스트"
           },
           {
@@ -307,7 +307,7 @@
               "3.3"
             ],
             "details": "1. 프로필 업데이트 DTO 구현 (UpdateProfileDto)\n2. 프로필 조회 엔드포인트 구현 (/auth/profile)\n3. 프로필 업데이트 엔드포인트 구현 (/auth/profile)\n4. 비밀번호 변경 DTO 구현 (ChangePasswordDto)\n5. 비밀번호 변경 엔드포인트 구현 (/auth/change-password)\n6. 프로필 이미지 업로드 기능 구현 (선택적)\n7. 사용자 정보 업데이트 서비스 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "프로필 업데이트 엔드포인트 테스트, 비밀번호 변경 테스트, 입력 유효성 검사 테스트"
           },
           {
@@ -318,7 +318,7 @@
               "3.2"
             ],
             "details": "1. 인증 가드 구현 (AuthGuard)\n2. 역할 기반 가드 구현 (RolesGuard)\n3. 현재 사용자 데코레이터 구현 (CurrentUser)\n4. 공개/비공개 엔드포인트 구분 로직 구현\n5. 인증 메타데이터 설정 데코레이터 구현 (Public, Roles)\n6. 가드 전역 적용 설정\n7. 인증 예외 처리 로직 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "가드 동작 테스트, 데코레이터 기능 테스트, 인증 실패 시나리오 테스트"
           },
           {
@@ -330,7 +330,7 @@
               "3.3"
             ],
             "details": "1. 토큰 갱신 엔드포인트 구현 (/auth/refresh)\n2. Refresh 토큰 검증 및 새 Access 토큰 발급 로직 구현\n3. 로그아웃 엔드포인트 구현 (/auth/logout)\n4. 로그아웃 시 Refresh 토큰 무효화 로직 구현\n5. 토큰 블랙리스트 관리 (선택적)\n6. 다중 기기 로그인 처리 로직 구현\n7. 토큰 만료 처리 로직 구현",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "토큰 갱신 플로우 테스트, 로그아웃 기능 테스트, 만료된 토큰 처리 테스트, 다중 기기 로그인/로그아웃 테스트"
           }
         ]
@@ -346,8 +346,127 @@
           1,
           3
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "인증 상태 관리 구현",
+            "description": "React Context API를 사용하여 애플리케이션 전체에서 사용자 인증 상태를 관리하는 시스템 구현",
+            "dependencies": [],
+            "details": "1. AuthContext 생성: 사용자 상태, 로그인/로그아웃 함수 포함\n2. AuthProvider 컴포넌트 구현: 자식 컴포넌트에 인증 상태 제공\n3. useAuth 커스텀 훅 구현: 컴포넌트에서 인증 상태 접근 용이하게 함\n4. 초기 로드 시 토큰 검증 로직 구현\n5. 인증 상태 변경 시 이벤트 처리",
+            "status": "done",
+            "testStrategy": "Context 값이 올바르게 제공되는지 테스트, 상태 변경 시 컴포넌트 리렌더링 테스트, 인증 상태 지속성 테스트"
+          },
+          {
+            "id": 2,
+            "title": "JWT 토큰 관리 유틸리티 구현",
+            "description": "JWT 토큰을 안전하게 저장, 검색, 갱신하는 유틸리티 함수 구현",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "1. 토큰 저장 함수 구현 (httpOnly 쿠키 사용)\n2. 토큰 검색 함수 구현\n3. 토큰 삭제 함수 구현\n4. 토큰 유효성 검사 함수 구현\n5. 토큰 갱신 함수 구현\n6. Remember Me 기능을 위한 토큰 만료 시간 설정 로직",
+            "status": "done",
+            "testStrategy": "토큰 저장 및 검색 테스트, 만료된 토큰 처리 테스트, Remember Me 기능 테스트"
+          },
+          {
+            "id": 3,
+            "title": "인증 API 호출 함수 구현",
+            "description": "백엔드 인증 API와 통신하는 함수들을 구현",
+            "dependencies": [
+              "4.2"
+            ],
+            "details": "1. 로그인 API 호출 함수 구현\n2. 회원가입 API 호출 함수 구현\n3. 이메일 인증 API 호출 함수 구현\n4. 비밀번호 재설정 요청 API 호출 함수 구현\n5. 비밀번호 변경 API 호출 함수 구현\n6. 로그아웃 API 호출 함수 구현\n7. 사용자 프로필 조회 API 호출 함수 구현\n8. 에러 처리 및 응답 포맷팅 로직 구현",
+            "status": "done",
+            "testStrategy": "API 호출 성공/실패 시나리오 테스트, 에러 처리 테스트, 모킹을 통한 API 응답 테스트"
+          },
+          {
+            "id": 4,
+            "title": "로그인 페이지 구현",
+            "description": "사용자 로그인 기능을 제공하는 페이지 구현",
+            "dependencies": [
+              "4.1",
+              "4.2",
+              "4.3"
+            ],
+            "details": "1. 로그인 폼 컴포넌트 구현 (이메일/비밀번호 입력)\n2. 폼 유효성 검사 구현\n3. 로그인 제출 핸들러 구현\n4. 로그인 에러 메시지 표시\n5. Remember Me 체크박스 및 기능 구현\n6. 비밀번호 재설정 링크 추가\n7. 회원가입 페이지 링크 추가\n8. 로그인 상태에 따른 리다이렉션 처리",
+            "status": "done",
+            "testStrategy": "폼 유효성 검사 테스트, 로그인 성공/실패 시나리오 테스트, Remember Me 기능 테스트"
+          },
+          {
+            "id": 5,
+            "title": "회원가입 페이지 구현",
+            "description": "새 사용자 등록을 위한 회원가입 페이지 구현",
+            "dependencies": [
+              "4.1",
+              "4.3"
+            ],
+            "details": "1. 회원가입 폼 컴포넌트 구현 (이메일, 비밀번호, 닉네임 등)\n2. 폼 유효성 검사 구현 (이메일 형식, 비밀번호 강도 등)\n3. 회원가입 제출 핸들러 구현\n4. 이메일 중복 확인 기능 구현\n5. 회원가입 성공 시 이메일 인증 안내 페이지로 리다이렉션\n6. 이용약관 및 개인정보 처리방침 동의 체크박스 구현\n7. 로그인 페이지 링크 추가",
+            "status": "done",
+            "testStrategy": "폼 유효성 검사 테스트, 회원가입 성공/실패 시나리오 테스트, 이메일 중복 확인 테스트"
+          },
+          {
+            "id": 6,
+            "title": "이메일 인증 페이지 구현",
+            "description": "회원가입 후 이메일 인증을 처리하는 페이지 구현",
+            "dependencies": [
+              "4.1",
+              "4.3"
+            ],
+            "details": "1. 이메일 인증 토큰 처리 로직 구현\n2. URL 파라미터에서 인증 토큰 추출\n3. 인증 성공/실패 상태 표시\n4. 인증 성공 시 로그인 페이지로 리다이렉션 버튼 추가\n5. 인증 실패 시 재시도 옵션 제공\n6. 인증 이메일 재전송 기능 구현\n7. 로딩 상태 표시",
+            "status": "done",
+            "testStrategy": "토큰 검증 테스트, 인증 성공/실패 시나리오 테스트, 이메일 재전송 기능 테스트"
+          },
+          {
+            "id": 7,
+            "title": "비밀번호 재설정 페이지 구현",
+            "description": "비밀번호 재설정 요청 및 새 비밀번호 설정 페이지 구현",
+            "dependencies": [
+              "4.1",
+              "4.3"
+            ],
+            "details": "1. 비밀번호 재설정 요청 폼 구현 (이메일 입력)\n2. 비밀번호 재설정 이메일 전송 후 안내 화면 구현\n3. 비밀번호 재설정 토큰 처리 로직 구현\n4. 새 비밀번호 입력 폼 구현\n5. 비밀번호 강도 검사 및 확인 로직 구현\n6. 비밀번호 변경 성공 시 로그인 페이지로 리다이렉션\n7. 에러 처리 및 사용자 피드백 제공",
+            "status": "done",
+            "testStrategy": "비밀번호 재설정 플로우 테스트, 토큰 유효성 테스트, 비밀번호 강도 검사 테스트"
+          },
+          {
+            "id": 8,
+            "title": "프로필 페이지 구현",
+            "description": "사용자 프로필 정보 표시 및 수정 기능 구현",
+            "dependencies": [
+              "4.1",
+              "4.2",
+              "4.3"
+            ],
+            "details": "1. 사용자 프로필 정보 표시 컴포넌트 구현\n2. 프로필 정보 수정 폼 구현\n3. 프로필 이미지 업로드 기능 구현\n4. 비밀번호 변경 섹션 구현\n5. 계정 설정 옵션 구현\n6. 프로필 변경사항 저장 기능 구현\n7. 변경 성공/실패 피드백 제공",
+            "status": "done",
+            "testStrategy": "프로필 정보 로드 테스트, 정보 수정 테스트, 이미지 업로드 테스트, 비밀번호 변경 테스트"
+          },
+          {
+            "id": 9,
+            "title": "보호된 라우트 구현",
+            "description": "인증이 필요한 페이지에 대한 접근 제어 구현",
+            "dependencies": [
+              "4.1",
+              "4.2"
+            ],
+            "details": "1. ProtectedRoute 컴포넌트 구현\n2. 인증되지 않은 사용자 리다이렉션 로직 구현\n3. 로딩 상태 처리\n4. 권한 수준에 따른 접근 제어 로직 구현\n5. Next.js 미들웨어를 활용한 서버 사이드 보호 구현\n6. 인증 상태 확인 로직 최적화",
+            "status": "done",
+            "testStrategy": "인증된/인증되지 않은 사용자 접근 테스트, 리다이렉션 테스트, 권한 수준 테스트"
+          },
+          {
+            "id": 10,
+            "title": "로그아웃 기능 구현",
+            "description": "사용자 로그아웃 기능 및 관련 UI 구현",
+            "dependencies": [
+              "4.1",
+              "4.2",
+              "4.3"
+            ],
+            "details": "1. 로그아웃 버튼 컴포넌트 구현\n2. 로그아웃 확인 모달 구현\n3. 로그아웃 처리 로직 구현 (토큰 삭제, 상태 초기화)\n4. 로그아웃 후 홈페이지로 리다이렉션\n5. 모든 인증 데이터 정리 로직 구현\n6. 로그아웃 성공/실패 피드백 제공",
+            "status": "done",
+            "testStrategy": "로그아웃 기능 테스트, 토큰 삭제 확인 테스트, 상태 초기화 테스트, 리다이렉션 테스트"
+          }
+        ]
       },
       {
         "id": 5,
@@ -360,8 +479,120 @@
           2,
           3
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Studio 모듈 및 엔티티 설정",
+            "description": "Studio 모듈 생성 및 관련 엔티티(Studio, StudioMember) 구현",
+            "dependencies": [],
+            "details": "1. NestJS CLI를 사용하여 Studio 모듈 생성\n2. Studio 엔티티 구현 (id, name, description, created_by, created_at, updated_at)\n3. StudioMember 엔티티 구현 (id, studio_id, user_id, role, created_at)\n4. TypeORM 관계 설정 (Studio-User, Studio-StudioMember)\n5. 모듈에 필요한 providers 등록",
+            "status": "done",
+            "testStrategy": "엔티티 유효성 검사 및 관계 설정 테스트"
+          },
+          {
+            "id": 2,
+            "title": "Studio 컨트롤러 및 서비스 구현",
+            "description": "Studio 관련 컨트롤러와 서비스 레이어 구현",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "1. StudioController 클래스 생성 및 기본 라우트 설정\n2. StudioService 클래스 구현\n3. DTO 클래스 생성 (CreateStudioDto, UpdateStudioDto)\n4. 서비스 로직에 필요한 Repository 주입\n5. 기본 에러 처리 구현",
+            "status": "done",
+            "testStrategy": "컨트롤러 및 서비스 단위 테스트 작성"
+          },
+          {
+            "id": 3,
+            "title": "스튜디오 CRUD 엔드포인트 구현",
+            "description": "스튜디오 생성, 조회, 수정, 삭제 API 엔드포인트 구현",
+            "dependencies": [
+              "5.2"
+            ],
+            "details": "1. POST /studios - 스튜디오 생성 엔드포인트\n2. GET /studios - 스튜디오 목록 조회 엔드포인트 (페이지네이션 포함)\n3. GET /studios/:id - 특정 스튜디오 상세 조회 엔드포인트\n4. PATCH /studios/:id - 스튜디오 정보 수정 엔드포인트\n5. DELETE /studios/:id - 스튜디오 삭제 엔드포인트\n6. 입력 유효성 검사 구현",
+            "status": "done",
+            "testStrategy": "각 CRUD 엔드포인트에 대한 통합 테스트 작성"
+          },
+          {
+            "id": 4,
+            "title": "역할 기반 권한 관리 시스템 구현",
+            "description": "스튜디오 내 사용자 역할(Admin, Editor, Viewer) 기반 권한 관리 시스템 구현",
+            "dependencies": [
+              "5.1",
+              "5.2"
+            ],
+            "details": "1. 역할 enum 정의 (Admin, Editor, Viewer)\n2. 역할별 권한 정의 및 매핑\n3. 권한 검사 가드(Guard) 구현\n4. 커스텀 데코레이터 생성 (@Roles, @StudioAccess)\n5. 역할 변경 API 엔드포인트 구현 (PATCH /studios/:id/members/:userId/role)",
+            "status": "done",
+            "testStrategy": "역할별 권한 접근 테스트, 권한 변경 기능 테스트"
+          },
+          {
+            "id": 5,
+            "title": "멤버 초대 시스템 구현",
+            "description": "이메일을 통한 스튜디오 멤버 초대 시스템 구현",
+            "dependencies": [
+              "5.3",
+              "5.4"
+            ],
+            "details": "1. 초대 DTO 생성 (InviteMemberDto)\n2. 이메일 서비스 통합 (NodeMailer 또는 SendGrid)\n3. POST /studios/:id/invitations 엔드포인트 구현\n4. 초대 이메일 템플릿 생성\n5. 초대 처리 로직 구현 (이메일 발송, 초대 기록)",
+            "status": "done",
+            "testStrategy": "이메일 발송 기능 테스트, 초대 API 엔드포인트 테스트"
+          },
+          {
+            "id": 6,
+            "title": "초대 링크 생성 및 관리 기능",
+            "description": "스튜디오 초대 링크 생성, 검증 및 관리 기능 구현",
+            "dependencies": [
+              "5.5"
+            ],
+            "details": "1. 초대 토큰 생성 로직 구현 (JWT 또는 UUID 기반)\n2. 초대 엔티티 생성 (id, studio_id, email, token, role, expires_at, accepted_at)\n3. GET /invitations/:token 엔드포인트 구현 (초대 정보 확인)\n4. POST /invitations/:token/accept 엔드포인트 구현 (초대 수락)\n5. 만료된 초대 처리 로직 구현",
+            "status": "done",
+            "testStrategy": "초대 링크 생성 및 검증 테스트, 만료 처리 테스트"
+          },
+          {
+            "id": 7,
+            "title": "스튜디오 통계 API 구현",
+            "description": "스튜디오 활동 및 사용 통계 API 구현",
+            "dependencies": [
+              "5.3"
+            ],
+            "details": "1. GET /studios/:id/statistics 엔드포인트 구현\n2. 멤버 수, 프로젝트 수 등 기본 통계 쿼리 구현\n3. 활동량 통계 쿼리 구현 (기간별 활동)\n4. 프로젝트 상태별 통계 쿼리 구현\n5. 통계 데이터 캐싱 전략 구현",
+            "status": "done",
+            "testStrategy": "통계 계산 정확성 테스트, 성능 테스트"
+          },
+          {
+            "id": 8,
+            "title": "활동 로그 기록 및 조회 API 구현",
+            "description": "스튜디오 내 사용자 활동 로깅 및 조회 API 구현",
+            "dependencies": [
+              "5.3",
+              "5.4"
+            ],
+            "details": "1. 활동 로그 엔티티 생성 (id, studio_id, user_id, action, target_type, target_id, created_at)\n2. 활동 로깅 서비스 구현\n3. 주요 활동 로깅 포인트 설정 (스튜디오 생성/수정, 멤버 추가/역할 변경 등)\n4. GET /studios/:id/activities 엔드포인트 구현 (페이지네이션, 필터링 포함)\n5. 로그 보관 정책 구현",
+            "status": "done",
+            "testStrategy": "활동 로깅 정확성 테스트, 조회 API 테스트"
+          },
+          {
+            "id": 9,
+            "title": "스튜디오 설정 관리 API 구현",
+            "description": "스튜디오 설정 관리를 위한 API 구현",
+            "dependencies": [
+              "5.3"
+            ],
+            "details": "1. 스튜디오 설정 엔티티 생성 (id, studio_id, key, value, created_at, updated_at)\n2. GET /studios/:id/settings 엔드포인트 구현\n3. PUT /studios/:id/settings/:key 엔드포인트 구현\n4. 기본 설정 값 정의 및 초기화 로직 구현\n5. 설정 변경 검증 로직 구현",
+            "status": "done",
+            "testStrategy": "설정 CRUD 기능 테스트, 설정 값 유효성 검사 테스트"
+          },
+          {
+            "id": 10,
+            "title": "권한 검사 미들웨어 구현",
+            "description": "스튜디오 접근 및 작업에 대한 권한 검사 미들웨어 구현",
+            "dependencies": [
+              "5.4"
+            ],
+            "details": "1. 스튜디오 접근 권한 검사 미들웨어 구현\n2. 작업별 권한 검사 로직 구현 (CRUD 작업별 필요 권한 정의)\n3. 권한 검사 결과에 따른 예외 처리 구현\n4. 권한 캐싱 전략 구현 (성능 최적화)\n5. 글로벌 가드와 연동하여 모든 스튜디오 관련 엔드포인트에 적용",
+            "status": "done",
+            "testStrategy": "다양한 권한 시나리오에 대한 테스트, 권한 거부 케이스 테스트"
+          }
+        ]
       },
       {
         "id": 6,
@@ -374,7 +605,7 @@
           4,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -388,8 +619,119 @@
           2,
           5
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Project 모듈 및 엔티티 생성",
+            "description": "프로젝트 관리를 위한 기본 모듈과 엔티티 구조 설정",
+            "dependencies": [],
+            "details": "1. NestJS Project 모듈 생성 (nest g module project)\n2. Project 엔티티 생성 (id, studio_id, name, description, status, category, created_at, updated_at, deleted_at 필드 포함)\n3. TypeORM 엔티티 데코레이터 설정\n4. 관계 설정 (Studio와의 ManyToOne 관계)\n5. 열거형 정의 (ProjectStatus, ProjectCategory)\n6. 인덱스 설정",
+            "status": "done",
+            "testStrategy": "엔티티 유효성 검사, 관계 설정 테스트, 열거형 값 검증 테스트"
+          },
+          {
+            "id": 2,
+            "title": "Project 컨트롤러 및 서비스 구현",
+            "description": "프로젝트 관리를 위한 기본 컨트롤러와 서비스 레이어 구현",
+            "dependencies": [
+              "7.1"
+            ],
+            "details": "1. Project 컨트롤러 생성 (nest g controller project)\n2. Project 서비스 생성 (nest g service project)\n3. 기본 의존성 주입 설정\n4. Repository 패턴 구현\n5. DTO 클래스 생성 (CreateProjectDto, UpdateProjectDto)\n6. 서비스 메소드 기본 구조 설정",
+            "status": "done",
+            "testStrategy": "컨트롤러 및 서비스 단위 테스트, 의존성 주입 테스트"
+          },
+          {
+            "id": 3,
+            "title": "프로젝트 CRUD 엔드포인트 구현",
+            "description": "프로젝트 생성, 조회, 수정, 삭제 API 엔드포인트 구현",
+            "dependencies": [
+              "7.2"
+            ],
+            "details": "1. POST /projects 엔드포인트 구현 (프로젝트 생성)\n2. GET /projects/:id 엔드포인트 구현 (단일 프로젝트 조회)\n3. GET /projects 엔드포인트 구현 (프로젝트 목록 조회)\n4. PATCH /projects/:id 엔드포인트 구현 (프로젝트 수정)\n5. DELETE /projects/:id 엔드포인트 구현 (프로젝트 삭제)\n6. 입력 유효성 검사 구현 (class-validator 사용)",
+            "status": "done",
+            "testStrategy": "각 엔드포인트 통합 테스트, 입력 유효성 검사 테스트, 에러 처리 테스트"
+          },
+          {
+            "id": 4,
+            "title": "프로젝트 상태 관리 API 구현",
+            "description": "프로젝트 상태(planning, in_progress, review, completed) 관리 API 구현",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. PATCH /projects/:id/status 엔드포인트 구현\n2. 상태 변경 유효성 검사 로직 구현 (상태 전이 규칙 설정)\n3. 상태 변경 이력 기록 기능 구현\n4. 상태별 프로젝트 조회 기능 구현 (GET /projects?status=in_progress)\n5. 상태 변경 시 관련 이벤트 발생 구현 (EventEmitter 사용)",
+            "status": "done",
+            "testStrategy": "상태 변경 테스트, 상태 전이 규칙 검증 테스트, 이벤트 발생 테스트"
+          },
+          {
+            "id": 5,
+            "title": "프로젝트 소프트 삭제 및 복구 구현",
+            "description": "deleted_at 필드를 사용한 소프트 삭제 및 복구 기능 구현",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. TypeORM SoftDelete 데코레이터 설정\n2. DELETE /projects/:id 엔드포인트에 소프트 삭제 구현\n3. GET /projects/trash 엔드포인트 구현 (삭제된 프로젝트 조회)\n4. PATCH /projects/:id/restore 엔드포인트 구현 (삭제된 프로젝트 복구)\n5. 소프트 삭제된 항목 필터링 로직 구현",
+            "status": "done",
+            "testStrategy": "소프트 삭제 테스트, 삭제된 항목 조회 테스트, 복구 기능 테스트"
+          },
+          {
+            "id": 6,
+            "title": "프로젝트 즉시 삭제 기능 구현",
+            "description": "프로젝트 영구 삭제 기능 구현",
+            "dependencies": [
+              "7.5"
+            ],
+            "details": "1. DELETE /projects/:id/permanent 엔드포인트 구현\n2. 관리자 권한 검증 로직 구현\n3. 영구 삭제 전 확인 메커니즘 구현\n4. 관련 리소스 정리 로직 구현 (연결된 파일, 댓글 등)\n5. 삭제 로그 기록 기능 구현",
+            "status": "done",
+            "testStrategy": "영구 삭제 테스트, 권한 검증 테스트, 관련 리소스 정리 테스트"
+          },
+          {
+            "id": 7,
+            "title": "프로젝트 초대 코드 생성 및 검증 API 구현",
+            "description": "프로젝트 참여를 위한 초대 코드 생성 및 검증 API 구현",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. POST /projects/:id/invitation-code 엔드포인트 구현 (초대 코드 생성)\n2. GET /projects/validate-invitation/:code 엔드포인트 구현 (초대 코드 검증)\n3. 초대 코드 생성 알고리즘 구현 (UUID 또는 nanoid 사용)\n4. 초대 코드 만료 시간 설정 및 검증\n5. 초대 코드 사용 횟수 제한 구현\n6. 초대 코드 사용 시 프로젝트 멤버 추가 로직 구현",
+            "status": "done",
+            "testStrategy": "초대 코드 생성 테스트, 코드 검증 테스트, 만료 시간 테스트, 사용 횟수 제한 테스트"
+          },
+          {
+            "id": 8,
+            "title": "프로젝트 카테고리 관리 API 구현",
+            "description": "프로젝트 카테고리(webtoon, illustration, storyboard, concept) 관리 API 구현",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. PATCH /projects/:id/category 엔드포인트 구현\n2. 카테고리 유효성 검사 로직 구현\n3. 카테고리별 프로젝트 조회 기능 구현 (GET /projects?category=webtoon)\n4. 카테고리 통계 API 구현 (GET /projects/category-stats)\n5. 카테고리 메타데이터 관리 기능 구현 (아이콘, 설명 등)",
+            "status": "done",
+            "testStrategy": "카테고리 변경 테스트, 카테고리별 조회 테스트, 통계 API 테스트"
+          },
+          {
+            "id": 9,
+            "title": "프로젝트 필터링 및 정렬 API 구현",
+            "description": "다양한 조건에 따른 프로젝트 필터링 및 정렬 API 구현",
+            "dependencies": [
+              "7.3",
+              "7.4",
+              "7.8"
+            ],
+            "details": "1. GET /projects 엔드포인트에 필터링 파라미터 추가 (status, category, created_by, date_range)\n2. 정렬 파라미터 구현 (sort_by, order)\n3. 페이지네이션 구현 (page, limit)\n4. 검색 기능 구현 (search 파라미터)\n5. 필터링 조합 로직 구현\n6. 응답 메타데이터 추가 (총 항목 수, 페이지 정보 등)",
+            "status": "done",
+            "testStrategy": "필터링 테스트, 정렬 테스트, 페이지네이션 테스트, 검색 기능 테스트"
+          },
+          {
+            "id": 10,
+            "title": "프로젝트 접근 권한 검사 미들웨어 구현",
+            "description": "프로젝트 접근 권한을 검사하는 미들웨어 구현",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. 프로젝트 접근 권한 검사 미들웨어 생성\n2. 사용자 역할 기반 접근 제어 구현 (RBAC)\n3. 프로젝트 소유자 확인 로직 구현\n4. 스튜디오 멤버십 확인 로직 구현\n5. 게스트 접근 제어 구현 (초대 코드 기반)\n6. 권한 거부 시 적절한 HTTP 응답 구현 (403 Forbidden)\n7. 컨트롤러에 미들웨어 적용",
+            "status": "done",
+            "testStrategy": "권한 검사 테스트, 다양한 역할별 접근 테스트, 권한 거부 시나리오 테스트"
+          }
+        ]
       },
       {
         "id": 8,
@@ -402,8 +744,116 @@
           6,
           7
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "프로젝트 카드 컴포넌트 구현",
+            "description": "프로젝트 목록에서 사용할 재사용 가능한 프로젝트 카드 컴포넌트 개발",
+            "dependencies": [],
+            "details": "1. 프로젝트 카드 컴포넌트 생성 (components/projects/ProjectCard.tsx)\n2. 프로젝트 이름, 설명, 상태, 카테고리, 생성일 표시\n3. 상태에 따른 색상 표시 (planning: 회색, in_progress: 파란색, review: 노란색, completed: 녹색)\n4. 카테고리 아이콘 구현 (webtoon, illustration, storyboard, concept)\n5. 카드 호버 효과 및 클릭 이벤트 구현\n6. 반응형 디자인 적용",
+            "status": "done",
+            "testStrategy": "1. 컴포넌트 렌더링 테스트\n2. 다양한 상태와 카테고리에 따른 스타일 변화 테스트\n3. 호버 및 클릭 이벤트 테스트\n4. 반응형 디자인 테스트"
+          },
+          {
+            "id": 2,
+            "title": "프로젝트 목록 페이지 구현",
+            "description": "스튜디오 내 프로젝트 목록을 보여주는 페이지 구현",
+            "dependencies": [
+              "8.1"
+            ],
+            "details": "1. 프로젝트 목록 페이지 생성 (app/studios/[id]/projects/page.tsx)\n2. 서버 컴포넌트에서 프로젝트 목록 데이터 가져오기\n3. 프로젝트 카드 컴포넌트를 사용하여 그리드 형태로 목록 표시\n4. 빈 상태 처리 (프로젝트가 없을 때)\n5. 로딩 상태 처리\n6. 새 프로젝트 생성 버튼 추가\n7. 페이지네이션 또는 무한 스크롤 구현",
+            "status": "done",
+            "testStrategy": "1. 페이지 렌더링 테스트\n2. 데이터 로딩 및 표시 테스트\n3. 빈 상태 및 로딩 상태 테스트\n4. 페이지네이션/무한 스크롤 테스트"
+          },
+          {
+            "id": 3,
+            "title": "프로젝트 필터링 및 정렬 UI 구현",
+            "description": "프로젝트 목록 페이지에서 필터링 및 정렬 기능 구현",
+            "dependencies": [
+              "8.2"
+            ],
+            "details": "1. 필터링 컴포넌트 생성 (components/projects/ProjectFilters.tsx)\n2. 상태별 필터링 (planning, in_progress, review, completed)\n3. 카테고리별 필터링 (webtoon, illustration, storyboard, concept)\n4. 정렬 옵션 구현 (최신순, 오래된순, 이름순)\n5. URL 쿼리 파라미터와 연동하여 필터 상태 유지\n6. 필터 초기화 버튼 구현\n7. 클라이언트 컴포넌트로 구현하여 실시간 필터링 적용",
+            "status": "done",
+            "testStrategy": "1. 필터 적용 및 해제 테스트\n2. 정렬 기능 테스트\n3. URL 쿼리 파라미터 연동 테스트\n4. 필터 초기화 테스트"
+          },
+          {
+            "id": 4,
+            "title": "프로젝트 생성 페이지 구현",
+            "description": "새 프로젝트를 생성하는 폼 페이지 구현",
+            "dependencies": [],
+            "details": "1. 프로젝트 생성 페이지 생성 (app/studios/[id]/projects/create/page.tsx)\n2. 프로젝트 이름, 설명 입력 필드 구현\n3. 카테고리 선택 드롭다운 구현\n4. 초기 상태 설정 옵션 구현\n5. 폼 유효성 검사 추가\n6. 제출 및 취소 버튼 구현\n7. 성공/실패 알림 처리\n8. 생성 후 프로젝트 상세 페이지로 리다이렉트",
+            "status": "done",
+            "testStrategy": "1. 폼 입력 및 제출 테스트\n2. 유효성 검사 테스트\n3. API 연동 테스트\n4. 리다이렉트 테스트"
+          },
+          {
+            "id": 5,
+            "title": "카테고리 선택 UI 구현",
+            "description": "프로젝트 생성 및 편집 시 사용할 카테고리 선택 컴포넌트 구현",
+            "dependencies": [
+              "8.4"
+            ],
+            "details": "1. 카테고리 선택 컴포넌트 생성 (components/projects/CategorySelector.tsx)\n2. 각 카테고리별 아이콘 및 레이블 표시\n3. 선택된 카테고리 시각적 표시\n4. 라디오 버튼 또는 카드 형태의 선택 UI 구현\n5. 폼 컨트롤과 연동 (React Hook Form 사용)\n6. 접근성 고려 (키보드 탐색, 스크린 리더 지원)",
+            "status": "done",
+            "testStrategy": "1. 컴포넌트 렌더링 테스트\n2. 카테고리 선택 및 변경 테스트\n3. 폼 연동 테스트\n4. 접근성 테스트"
+          },
+          {
+            "id": 6,
+            "title": "프로젝트 상세 페이지 구현",
+            "description": "프로젝트의 상세 정보를 보여주는 페이지 구현",
+            "dependencies": [
+              "8.1"
+            ],
+            "details": "1. 프로젝트 상세 페이지 생성 (app/studios/[id]/projects/[projectId]/page.tsx)\n2. 프로젝트 헤더 섹션 구현 (이름, 상태, 카테고리, 생성일)\n3. 프로젝트 설명 섹션 구현\n4. 프로젝트 통계 섹션 구현 (씬 수, 참여자 수 등)\n5. 탭 인터페이스 구현 (씬, 멤버, 활동 내역 등)\n6. 설정 페이지 링크 추가\n7. 프로젝트 상태 변경 UI 통합",
+            "status": "done",
+            "testStrategy": "1. 페이지 렌더링 테스트\n2. 데이터 로딩 및 표시 테스트\n3. 탭 전환 테스트\n4. 상태 변경 테스트"
+          },
+          {
+            "id": 7,
+            "title": "상태 변경 드롭다운 구현",
+            "description": "프로젝트 상태를 변경할 수 있는 드롭다운 컴포넌트 구현",
+            "dependencies": [
+              "8.6"
+            ],
+            "details": "1. 상태 변경 드롭다운 컴포넌트 생성 (components/projects/StatusDropdown.tsx)\n2. 현재 상태 표시 및 색상 적용\n3. 드롭다운 메뉴에 가능한 상태 목록 표시\n4. 상태 변경 시 API 호출 구현\n5. 변경 중 로딩 상태 처리\n6. 성공/실패 피드백 제공\n7. 권한에 따른 접근 제어 (관리자/편집자만 변경 가능)",
+            "status": "done",
+            "testStrategy": "1. 드롭다운 열기/닫기 테스트\n2. 상태 변경 테스트\n3. API 연동 테스트\n4. 권한 제어 테스트"
+          },
+          {
+            "id": 8,
+            "title": "프로젝트 설정 페이지 구현",
+            "description": "프로젝트 설정을 관리하는 페이지 구현",
+            "dependencies": [
+              "8.6",
+              "8.5"
+            ],
+            "details": "1. 프로젝트 설정 페이지 생성 (app/studios/[id]/projects/[projectId]/settings/page.tsx)\n2. 프로젝트 정보 편집 폼 구현 (이름, 설명, 카테고리)\n3. 프로젝트 삭제 섹션 구현\n4. 멤버 관리 섹션 구현\n5. 초대 코드 관리 섹션 구현\n6. 설정 변경 저장 기능 구현\n7. 권한에 따른 접근 제어 (관리자만 접근 가능)",
+            "status": "done",
+            "testStrategy": "1. 페이지 렌더링 테스트\n2. 설정 변경 및 저장 테스트\n3. 권한 제어 테스트\n4. 각 섹션별 기능 테스트"
+          },
+          {
+            "id": 9,
+            "title": "프로젝트 삭제 및 복구 UI 구현",
+            "description": "프로젝트 삭제 및 복구 기능을 위한 UI 구현",
+            "dependencies": [
+              "8.8"
+            ],
+            "details": "1. 삭제 확인 모달 컴포넌트 생성 (components/projects/DeleteProjectModal.tsx)\n2. 삭제 경고 메시지 및 확인 입력 필드 구현\n3. 삭제 API 연동 및 로딩 상태 처리\n4. 삭제된 프로젝트 목록 페이지 구현 (휴지통 기능)\n5. 복구 버튼 및 기능 구현\n6. 영구 삭제 옵션 구현\n7. 성공/실패 알림 처리",
+            "status": "done",
+            "testStrategy": "1. 삭제 모달 열기/닫기 테스트\n2. 삭제 확인 및 API 연동 테스트\n3. 복구 기능 테스트\n4. 영구 삭제 테스트"
+          },
+          {
+            "id": 10,
+            "title": "초대 코드 생성 및 공유 UI 구현",
+            "description": "프로젝트 멤버 초대를 위한 초대 코드 생성 및 공유 UI 구현",
+            "dependencies": [
+              "8.8"
+            ],
+            "details": "1. 초대 코드 생성 버튼 및 모달 구현 (components/projects/InviteCodeModal.tsx)\n2. 초대 코드 표시 및 복사 기능 구현\n3. 초대 링크 생성 및 공유 옵션 구현 (이메일, 메시지 등)\n4. QR 코드 생성 및 표시 기능 구현\n5. 초대 코드 만료 설정 옵션 구현\n6. 초대 코드 재생성 기능 구현\n7. 초대 코드 사용 현황 표시",
+            "status": "done",
+            "testStrategy": "1. 초대 코드 생성 테스트\n2. 복사 기능 테스트\n3. 공유 옵션 테스트\n4. QR 코드 생성 테스트\n5. 만료 설정 테스트"
+          }
+        ]
       },
       {
         "id": 9,
@@ -416,8 +866,64 @@
           2,
           7
         ],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Scene 모듈 및 기본 CRUD 구현",
+            "description": "Scene 모듈 생성 및 기본적인 CRUD 기능을 위한 컨트롤러, 서비스, 엔티티 구현",
+            "dependencies": [],
+            "details": "1. Scene 모듈 생성 (nest g module scene)\n2. Scene 엔티티 정의 (id, projectId, title, description, order, thumbnailUrl, createdAt, updatedAt)\n3. Scene 컨트롤러 생성 (nest g controller scene)\n4. Scene 서비스 생성 (nest g service scene)\n5. 기본 CRUD 메서드 구현 (create, findAll, findOne, update, remove)\n6. TypeORM 리포지토리 설정 및 의존성 주입\n7. DTO 클래스 생성 (CreateSceneDto, UpdateSceneDto)\n8. 유효성 검증 데코레이터 적용",
+            "status": "done",
+            "testStrategy": "1. 각 CRUD 엔드포인트에 대한 단위 테스트 작성\n2. 서비스 메서드 단위 테스트\n3. 엔드포인트 통합 테스트 (실제 DB 연결)"
+          },
+          {
+            "id": 2,
+            "title": "다중 파일 업로드 및 메타데이터 처리",
+            "description": "씬 이미지 파일 업로드 기능 및 파일 메타데이터 추출/저장 구현",
+            "dependencies": [
+              "9.1"
+            ],
+            "details": "1. Multer 모듈 설정 (NestJS용 파일 업로드 미들웨어)\n2. 파일 저장 경로 및 이름 지정 전략 구현\n3. 다중 파일 업로드를 위한 컨트롤러 엔드포인트 구현 (/scenes/upload)\n4. 파일 메타데이터 추출 유틸리티 함수 구현 (크기, 해상도, 형식 등)\n5. 메타데이터를 Scene 엔티티와 연결하여 저장\n6. 파일 확장자 및 크기 제한 설정\n7. 에러 처리 및 예외 상황 관리\n8. 업로드 진행 상태 모니터링 기능 구현",
+            "status": "done",
+            "testStrategy": "1. 다양한 파일 형식 업로드 테스트\n2. 대용량 파일 처리 테스트\n3. 잘못된 형식 파일 업로드 시 에러 처리 테스트\n4. 메타데이터 추출 정확성 테스트"
+          },
+          {
+            "id": 3,
+            "title": "썸네일 자동 생성 기능 구현",
+            "description": "업로드된 씬 이미지에서 썸네일을 자동으로 생성하고 저장하는 기능 구현",
+            "dependencies": [
+              "9.2"
+            ],
+            "details": "1. Sharp 라이브러리 설치 및 설정 (npm install sharp)\n2. 썸네일 생성 서비스 구현 (SceneThumbnailService)\n3. 다양한 크기의 썸네일 생성 기능 구현 (소/중/대)\n4. 이미지 최적화 및 포맷 변환 기능 (WebP 지원)\n5. 썸네일 저장 경로 관리 및 URL 생성\n6. 비동기 썸네일 생성 프로세스 구현 (대용량 파일 처리 최적화)\n7. 썸네일 생성 실패 시 폴백 메커니즘 구현\n8. 기존 씬 이미지에 대한 썸네일 생성 배치 프로세스 구현",
+            "status": "done",
+            "testStrategy": "1. 다양한 이미지 형식에 대한 썸네일 생성 테스트\n2. 썸네일 품질 및 크기 검증\n3. 에러 상황 처리 테스트\n4. 성능 및 메모리 사용량 테스트"
+          },
+          {
+            "id": 4,
+            "title": "씬 순서 변경 및 일괄 작업 API 구현",
+            "description": "씬의 순서를 변경하고 다수의 씬에 대한 일괄 작업(선택, 삭제, 이동)을 처리하는 API 구현",
+            "dependencies": [
+              "9.1"
+            ],
+            "details": "1. 씬 순서 변경 엔드포인트 구현 (/scenes/reorder)\n2. 드래그 앤 드롭 순서 변경을 위한 배열 처리 로직 구현\n3. 트랜잭션을 사용한 안전한 순서 업데이트 구현\n4. 다중 씬 선택 API 구현 (/scenes/select)\n5. 선택된 씬 일괄 삭제 기능 구현 (/scenes/bulk-delete)\n6. 선택된 씬 일괄 이동 기능 구현 (/scenes/bulk-move)\n7. 일괄 작업 결과 검증 및 롤백 메커니즘 구현\n8. 대량 작업 시 성능 최적화 (벌크 연산 활용)",
+            "status": "done",
+            "testStrategy": "1. 순서 변경 정확성 테스트\n2. 동시성 이슈 테스트 (여러 사용자가 동시에 순서 변경)\n3. 일괄 작업 성공/실패 시나리오 테스트\n4. 대량 데이터 처리 성능 테스트"
+          },
+          {
+            "id": 5,
+            "title": "버전 관리 시스템 및 히스토리 API 구현",
+            "description": "씬의 버전 관리 시스템 및 버전 히스토리를 조회할 수 있는 API 구현",
+            "dependencies": [
+              "9.1",
+              "9.2",
+              "9.3"
+            ],
+            "details": "1. SceneVersion 엔티티 설계 및 구현 (id, sceneId, version, fileUrl, thumbnailUrl, metadata, createdAt, createdBy)\n2. 버전 생성 로직 구현 (새 버전 업로드 시 이전 버전 보존)\n3. 버전 히스토리 조회 API 구현 (/scenes/:id/versions)\n4. 특정 버전 상세 조회 API 구현 (/scenes/:id/versions/:versionId)\n5. 버전 간 비교 기능 구현 (/scenes/:id/versions/compare)\n6. 이전 버전으로 롤백 기능 구현 (/scenes/:id/versions/:versionId/restore)\n7. 버전 메타데이터 관리 (변경 사항 설명, 작업자 정보 등)\n8. 오래된 버전 아카이빙 정책 구현 (스토리지 최적화)\n<info added on 2025-09-05T10:52:50.661Z>\n구현 완료 사항:\n1. SceneVersion 엔티티 설계 및 구현 완료 (id, sceneId, version, fileUrl, thumbnailUrl, metadata, createdAt, createdBy)\n2. SceneVersionService 서비스 구현 완료\n   - 버전 생성 로직 구현\n   - 버전 히스토리 조회 기능\n   - 버전 간 비교 기능\n   - 이전 버전으로 롤백 기능\n   - 오래된 버전 아카이빙 정책 구현\n3. 버전 관리 API 엔드포인트 구현 완료\n   - /scenes/:id/versions (버전 히스토리 조회)\n   - /scenes/:id/versions/:versionId (특정 버전 상세 조회)\n   - /scenes/:id/versions/compare (버전 간 비교)\n   - /scenes/:id/versions/:versionId/restore (이전 버전으로 롤백)\n   - /scenes/:id/versions/metadata (버전 메타데이터 관리)\n   - /scenes/:id/versions/archive (버전 아카이빙)\n4. Scene 모듈 및 서비스 업데이트 완료 (버전 관리 통합)\n5. 자동 버전 저장 기능 추가 완료 (씬 변경 시 자동 버전 생성)\n</info added on 2025-09-05T10:52:50.661Z>",
+            "status": "done",
+            "testStrategy": "1. 버전 생성 및 관리 테스트\n2. 버전 히스토리 조회 정확성 테스트\n3. 롤백 기능 테스트\n4. 대용량 버전 히스토리 성능 테스트"
+          }
+        ]
       },
       {
         "id": 10,
@@ -431,7 +937,62 @@
           9
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "씬 목록 및 상세 페이지 구현",
+            "description": "씬 관리를 위한 기본 페이지 구조와 라우팅 구현. 씬 목록 페이지와 상세 페이지를 개발하고 기본 레이아웃 및 네비게이션 구성.",
+            "dependencies": [],
+            "details": "1. Next.js App Router를 사용하여 씬 목록 페이지 (/studios/[id]/projects/[projectId]/scenes) 구현\n2. 씬 상세 페이지 (/studios/[id]/projects/[projectId]/scenes/[sceneId]) 구현\n3. 페이지 간 네비게이션 구현 (목록에서 상세로, 상세에서 목록으로)\n4. API 연동을 위한 데이터 fetching 로직 구현 (React Query 또는 SWR 사용)\n5. 씬 목록 및 상세 정보 표시를 위한 기본 UI 컴포넌트 개발\n6. 로딩 및 에러 상태 처리",
+            "status": "done",
+            "testStrategy": "1. 각 페이지 렌더링 테스트\n2. 라우팅 테스트\n3. API 연동 테스트\n4. 로딩 및 에러 상태 테스트"
+          },
+          {
+            "id": 2,
+            "title": "파일 업로드 및 진행 상태 UI 구현",
+            "description": "씬 이미지 파일을 업로드하기 위한 드래그앤드롭 인터페이스와 업로드 진행 상태를 표시하는 UI 구현",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "1. react-dropzone 라이브러리를 사용하여 드래그앤드롭 파일 업로드 영역 구현\n2. 파일 유형 검증 로직 구현 (이미지 파일만 허용)\n3. 파일 크기 제한 및 검증 로직 구현\n4. 업로드 진행 상태를 표시하는 프로그레스 바 컴포넌트 개발\n5. 업로드 성공/실패 피드백 UI 구현\n6. 다중 파일 업로드 지원\n7. 업로드 취소 기능 구현",
+            "status": "done",
+            "testStrategy": "1. 파일 드래그앤드롭 기능 테스트\n2. 파일 유형 및 크기 검증 테스트\n3. 업로드 진행 상태 표시 테스트\n4. 다중 파일 업로드 테스트\n5. 업로드 취소 기능 테스트"
+          },
+          {
+            "id": 3,
+            "title": "씬 순서 변경 드래그앤드롭 UI 구현",
+            "description": "씬의 순서를 변경할 수 있는 드래그앤드롭 인터페이스 구현. 사용자가 씬을 직관적으로 재정렬할 수 있는 기능 제공.",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "1. react-beautiful-dnd 라이브러리를 사용하여 드래그앤드롭 기능 구현\n2. 씬 목록 컴포넌트에 드래그앤드롭 기능 통합\n3. 드래그 중인 아이템의 시각적 피드백 구현\n4. 순서 변경 시 애니메이션 효과 추가\n5. 순서 변경 후 서버에 업데이트하는 API 연동 구현\n6. 순서 변경 실패 시 롤백 및 에러 처리\n7. 접근성 고려 (키보드 네비게이션 지원)",
+            "status": "done",
+            "testStrategy": "1. 드래그앤드롭 기능 테스트\n2. 순서 변경 후 데이터 상태 검증\n3. API 연동 테스트\n4. 에러 처리 테스트\n5. 접근성 테스트"
+          },
+          {
+            "id": 4,
+            "title": "썸네일 그리드 뷰 및 이미지 프리뷰 구현",
+            "description": "씬 이미지의 썸네일을 그리드 형태로 표시하고, 이미지 프리뷰 기능을 제공하는 컴포넌트 구현",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "1. 반응형 그리드 레이아웃 구현 (CSS Grid 또는 Flexbox 사용)\n2. 썸네일 이미지 최적화 (Next.js Image 컴포넌트 활용)\n3. 이미지 프리뷰 모달 컴포넌트 개발\n4. 이미지 확대/축소 기능 구현\n5. 이미지 간 네비게이션 기능 (이전/다음 이미지)\n6. 그리드 뷰와 리스트 뷰 전환 기능 구현\n7. 이미지 로딩 상태 및 에러 처리\n8. 일괄 작업 UI 구현 (선택, 삭제, 이동)",
+            "status": "done",
+            "testStrategy": "1. 그리드 레이아웃 렌더링 테스트\n2. 이미지 프리뷰 기능 테스트\n3. 확대/축소 및 네비게이션 테스트\n4. 뷰 전환 기능 테스트\n5. 일괄 작업 기능 테스트"
+          },
+          {
+            "id": 5,
+            "title": "버전 관리 UI 및 비교 뷰 구현",
+            "description": "씬의 버전 히스토리를 표시하고 버전 간 비교할 수 있는 UI 구현. 사용자가 씬의 변경 이력을 추적하고 비교할 수 있는 기능 제공.",
+            "dependencies": [
+              "10.1",
+              "10.4"
+            ],
+            "details": "1. 버전 히스토리 목록 UI 구현 (타임라인 형태)\n2. 각 버전의 메타데이터 표시 (생성 시간, 작성자, 변경 내용 등)\n3. 버전 간 전환 기능 구현\n4. 버전 비교 뷰 개발 (이미지 슬라이더 또는 오버레이 방식)\n5. 버전 간 차이점 하이라이트 기능 구현\n6. 버전 롤백 기능 구현\n7. 버전 주석 추가 기능 구현\n8. 버전 필터링 및 검색 기능 구현",
+            "status": "done",
+            "testStrategy": "1. 버전 히스토리 UI 렌더링 테스트\n2. 버전 전환 기능 테스트\n3. 버전 비교 뷰 테스트\n4. 롤백 기능 테스트\n5. 주석 추가 및 필터링 기능 테스트"
+          }
+        ]
       },
       {
         "id": 11,
@@ -444,7 +1005,7 @@
           1,
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -486,7 +1047,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -499,7 +1060,7 @@
         "dependencies": [
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": []
       },
       {
@@ -546,7 +1107,7 @@
       },
       {
         "id": 19,
-        "title": "이미지 뷰어 및 PDF 뷰어 구현",
+        "title": "이미지 뷰어 및 PDF 뷰어 구현", 
         "description": "이미지 및 PDF 뷰어 컴포넌트 구현",
         "details": "1. 이미지 뷰어 컴포넌트 구현\n2. 확대/축소 기능 구현\n3. 이미지 회전 기능 구현\n4. 이미지 비교 기능 구현 (버전 간)\n5. PDF 뷰어 컴포넌트 구현 (pdf.js 사용)\n6. PDF 페이지 네비게이션 구현\n7. PDF 썸네일 네비게이션 구현\n8. 전체 화면 모드 구현\n9. 이미지/PDF 다운로드 기능 구현\n10. 모바일 터치 제스처 지원",
         "testStrategy": "컴포넌트 테스트: 뷰어 렌더링\n통합 테스트: 확대/축소 및 네비게이션\nPDF 로딩 및 페이지 이동 테스트\n모바일 제스처 테스트",
@@ -661,7 +1222,7 @@
     ],
     "metadata": {
       "created": "2025-09-05T04:08:19.961Z",
-      "updated": "2025-09-05T04:44:47.851Z",
+      "updated": "2025-09-05T11:28:35.163Z",
       "description": "Tasks for master context"
     }
   }

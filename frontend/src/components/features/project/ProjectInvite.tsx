@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { api } from '@/lib/api/client';
+import api from '@/utils/api';
 
 interface InviteInfo {
   valid: boolean;

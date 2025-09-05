@@ -16,7 +16,7 @@ import {
   ArrowLeft,
   FolderOpen,
   Palette,
-  Storyboard,
+  Layers,
   FileText,
   Clock,
   MessageSquare,
@@ -36,7 +36,7 @@ interface PageProps {
 const categoryIcons = {
   webtoon: FolderOpen,
   illustration: Palette,
-  storyboard: Storyboard,
+  storyboard: Layers,
   concept: FileImage,
 };
 
