@@ -110,3 +110,87 @@ export function ConflictResolutionDialog({
     };
     return labels[field] || field;
   };
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>충돌 해결</DialogTitle>
+          <DialogDescription>
+            {conflicts.length}개의 충돌이 발견되었습니다. 각 항목에 대해 선택해주세요.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {conflicts.map((conflict) => (
+            <Card key={conflict.field} className="p-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">
+                    {getFieldLabel(conflict.field)}
+                  </h3>
+                  <Select
+                    value={resolutions[conflict.field]}
+                    onValueChange={(value: 'local' | 'remote' | 'merge') =>
+                      handleResolutionChange(conflict.field, value)
+                    }
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="local">로컬</SelectItem>
+                      <SelectItem value="remote">서버</SelectItem>
+                      <SelectItem value="merge">병합</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>로컬 값</Label>
+                    <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded">
+                      {JSON.stringify(conflict.local, null, 2)}
+                    </div>
+                  </div>
+                  <div>
+                    <Label>서버 값</Label>
+                    <div className="p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                      {JSON.stringify(conflict.remote, null, 2)}
+                    </div>
+                  </div>
+                </div>
+
+                {resolutions[conflict.field] === 'merge' && (
+                  <div>
+                    <Label>병합된 값</Label>
+                    <Textarea
+                      value={JSON.stringify(mergedData[conflict.field], null, 2)}
+                      onChange={(e) => {
+                        try {
+                          const value = JSON.parse(e.target.value);
+                          handleMergedDataChange(conflict.field, value);
+                        } catch (error) {
+                          // JSON 파싱 에러 무시
+                        }
+                      }}
+                      className="font-mono text-sm"
+                      rows={5}
+                    />
+                  </div>
+                )}
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            취소
+          </Button>
+          <Button onClick={handleResolve}>충돌 해결</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
