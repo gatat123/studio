@@ -16,7 +16,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import {
-  Notification,
+  AppNotification,
   NotificationType,
   NotificationPriority,
 } from '@/types/notification.types';
@@ -26,7 +26,7 @@ import { Badge } from '@/components/ui/badge';
 import { useRouter } from 'next/navigation';
 
 interface NotificationItemProps {
-  notification: Notification;
+  notification: AppNotification;
   onMarkAsRead: (id: string, read: boolean) => void;
   onDelete: (id: string) => void;
 }

@@ -5,10 +5,10 @@ import { X, Bell, CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useWebSocket } from '@/hooks/useWebSocket';
-import { Notification, NotificationPriority } from '@/types/notification.types';
+import { AppNotification, NotificationPriority } from '@/types/notification.types';
 import { useRouter } from 'next/navigation';
 
-interface NotificationPopup extends Notification {
+interface NotificationPopup extends AppNotification {
   isVisible: boolean;
 }
 
@@ -41,7 +41,7 @@ export function NotificationPopup() {
     }
   }, [socket]);
 
-  const handleNewNotification = (notification: Notification) => {
+  const handleNewNotification = (notification: AppNotification) => {
     // 인앱 알림이 활성화된 경우에만 팝업 표시
     const popupNotification: NotificationPopup = {
       ...notification,

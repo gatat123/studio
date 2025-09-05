@@ -29,7 +29,7 @@ export interface NotificationMetadata {
   [key: string]: any;
 }
 
-export interface Notification {
+export interface AppNotification {
   id: string;
   userId: string;
   type: NotificationType;

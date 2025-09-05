@@ -2,13 +2,13 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useWebSocket } from '@/hooks/useWebSocket';
-import { Notification } from '@/types/notification.types';
+import { AppNotification } from '@/types/notification.types';
 import { useToast } from '@/hooks/use-toast';
 
 interface BrowserNotificationContextType {
   permission: NotificationPermission;
   requestPermission: () => Promise<void>;
-  showBrowserNotification: (notification: Notification) => void;
+  showBrowserNotification: (notification: AppNotification) => void;
 }
 
 const BrowserNotificationContext = createContext<BrowserNotificationContextType | undefined>(undefined);
@@ -67,7 +67,7 @@ export function BrowserNotificationProvider({ children }: { children: React.Reac
     }
   };
 
-  const showBrowserNotification = (notification: Notification) => {
+  const showBrowserNotification = (notification: AppNotification) => {
     if (permission !== 'granted') return;
 
     try {
@@ -96,7 +96,7 @@ export function BrowserNotificationProvider({ children }: { children: React.Reac
     }
   };
 
-  const handleNewNotification = (notification: Notification) => {
+  const handleNewNotification = (notification: AppNotification) => {
     // Check if browser notifications are enabled in user settings
     // and if the tab is not in focus
     if (!document.hasFocus()) {

@@ -1,6 +1,6 @@
 import axiosInstance from '@/lib/axios';
 import { 
-  Notification, 
+  AppNotification, 
   NotificationSettings 
 } from '@/types/notification.types';
 
@@ -14,7 +14,7 @@ export interface GetNotificationsQuery {
 }
 
 export interface NotificationResponse {
-  notifications: Notification[];
+  notifications: AppNotification[];
   total: number;
   hasMore?: boolean;
 }

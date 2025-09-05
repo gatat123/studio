@@ -15,11 +15,11 @@ import { NotificationItem } from './NotificationItem';
 import { NotificationSettings } from './NotificationSettings';
 import notificationAPI from '@/lib/api/notifications';
 import { useWebSocket } from '@/hooks/useWebSocket';
-import { Notification } from '@/types/notification.types';
+import { AppNotification } from '@/types/notification.types';
 import { useToast } from '@/hooks/use-toast';
 
 export function NotificationCenter() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +71,7 @@ export function NotificationCenter() {
     }
   };
 
-  const handleNewNotification = (notification: Notification) => {
+  const handleNewNotification = (notification: AppNotification) => {
     setNotifications(prev => [notification, ...prev]);
     setUnreadCount(prev => prev + 1);
 
