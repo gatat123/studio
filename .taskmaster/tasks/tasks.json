@@ -9,7 +9,7 @@
         "testStrategy": "각 프로젝트 빌드 및 실행 테스트, 데이터베이스 연결 테스트, 환경 변수 로드 테스트",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -83,7 +83,7 @@
             "description": "Git 저장소를 초기화하고 .gitignore 및 기타 Git 관련 설정을 구성합니다.",
             "dependencies": [],
             "details": "1. Git 저장소 초기화: `git init`\n2. .gitignore 파일 생성 및 설정 (node_modules, .env, .next, dist 등 제외)\n3. .gitattributes 파일 설정\n4. GitHub 저장소 생성 및 연결\n5. 초기 커밋 생성\n6. 브랜치 전략 수립 (main, develop, feature 등)\n7. GitHub Actions 기본 워크플로우 설정 (.github/workflows 폴더)",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Git 저장소 상태 확인, .gitignore 적용 테스트"
           },
           {
@@ -100,7 +100,7 @@
               "1.7"
             ],
             "details": "1. 프로젝트 루트에 README.md 파일 작성\n2. 프로젝트 개요 및 목적 설명\n3. 기술 스택 및 아키텍처 설명\n4. 설치 및 실행 방법 문서화\n5. 환경 변수 설정 방법 설명\n6. API 문서화 방법 설명 (Swagger 등)\n7. 개발 가이드라인 작성\n8. 폴더 구조 설명\n9. 기여 방법 안내",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "README 내용 검토, 설치 및 실행 지침 테스트"
           }
         ]
@@ -661,7 +661,7 @@
     ],
     "metadata": {
       "created": "2025-09-05T04:08:19.961Z",
-      "updated": "2025-09-05T04:35:40.617Z",
+      "updated": "2025-09-05T04:44:47.851Z",
       "description": "Tasks for master context"
     }
   }
