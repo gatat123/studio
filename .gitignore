@@ -74,3 +74,6 @@ ecosystem.config.js
 # Task Master
 .taskmaster/reports/
 .taskmaster/docs/research/
+
+# Backend folder (separate repository)
+backend/
